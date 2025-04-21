@@ -208,6 +208,13 @@ Run the script:
 who -b
 ```
 
+### Resources
+
+- Official Arch Wiki on Kexec: [Kexec - ArchWiki](https://wiki.archlinux.org/title/Kexec)
+- My Personal Blog: [Preserving Services with Faster Kernel Reboots Using Kexec](https://systemadmin-insights.hashnode.dev/preserving-services-with-faster-kernel-reboots-using-kexec)
+
+
+
 ## Conclusion
 
 In this guide, we’ve discussed the importance of reducing kernel boot time, especially during live updates. We explored methods like `kexec` and parallel SMP booting to reduce downtime and optimize the process. The use of persistent memory and handling user-space applications also plays a vital role in the efficiency of live updates.
@@ -219,3 +226,5 @@ In this guide, we’ve discussed the importance of reducing kernel boot time, es
 - **Kexec** enables switching kernels without rebooting, allowing for faster updates.
 
 ---
+
+
