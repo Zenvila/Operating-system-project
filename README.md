@@ -390,7 +390,7 @@ This demo helped you:
 ### Resources
 
 - Official Arch Wiki on Kexec: [Kexec - ArchWiki](https://wiki.archlinux.org/title/Kexec)
-- [Arch Wiki – Kernel Live Patching](https://wiki.archlinux.org/title/Kernel_live_patching)
+- Official Arch Wiki on Live Patching:[Arch Wiki – Kernel Live Patching](https://wiki.archlinux.org/title/Kernel_live_patching)
 - My Personal Blog: [Preserving Services with Faster Kernel Reboots Using Kexec](https://systemadmin-insights.hashnode.dev/preserving-services-with-faster-kernel-reboots-using-kexec)
 
 
