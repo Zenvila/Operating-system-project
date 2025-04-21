@@ -207,10 +207,190 @@ Run the script:
 ```bash
 who -b
 ```
+# 💻 Kernel Live Patching Demo on Arch Linux
+
+This project demonstrates how to create and load a basic kernel module in Arch Linux that prints a message to the kernel log. It’s a great first step into understanding how kernel modules work — a foundation for live patching.
+
+---
+
+## 📦 Step 1: Install Required Packages
+
+Install kernel headers and development tools needed for compiling kernel modules:
+
+```bash
+sudo pacman -S linux-headers git base-devel
+sudo pacman -S gcc make elfutils
+```
+
+---
+
+## 🌐 Step 2: (Optional) Clone kpatch Repository
+
+You can clone the `kpatch` repo for exploring advanced live patching tools:
+
+```bash
+git clone https://github.com/dynup/kpatch.git
+```
+
+> **Note:** This isn't required for the demo below, but useful for deeper exploration.
+
+---
+
+## 🗂️ Step 3: Create Project Directory
+
+```bash
+mkdir ~/kpatch-demo
+cd ~/kpatch-demo
+```
+
+---
+
+## ✍️ Step 4: Write the Kernel Module (`hello.c`)
+
+Create a file called `hello.c`:
+
+```c
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/init.h>
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Your Name");
+MODULE_DESCRIPTION("A Simple Hello World Kernel Module");
+
+static int __init hello_init(void)
+{
+    printk(KERN_INFO "Hello, BCS_4A! Project Present to Sir Amin\n");
+    return 0;
+}
+
+static void __exit hello_exit(void)
+{
+    printk(KERN_INFO "Goodbye, BCS_4A!\n");
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
+```
+
+### 🔍 What does this file do?
+
+This C file defines the kernel module:
+- `hello_init()` is called when the module is loaded.
+- `hello_exit()` is called when the module is removed.
+- `printk()` sends a message to the kernel log (viewable using `dmesg`).
+
+---
+
+## ⚙️ Step 5: Write the `Makefile`
+
+Create a file named `Makefile`:
+
+```makefile
+obj-m += hello.o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+```
+
+### 🔍 What does the Makefile do?
+
+It tells the build system:
+- How to compile your module using your kernel’s build system.
+- Where the kernel headers are located.
+
+---
+
+## 🛠️ Step 6: Compile the Module
+
+```bash
+make
+```
+
+This will compile your kernel module and produce a file called `hello.ko`.
+
+---
+
+## 📥 Step 7: Insert the Kernel Module
+
+```bash
+sudo insmod hello.ko
+```
+
+> This inserts the kernel module into the running kernel.
+
+---
+
+## 🔎 Step 8: Verify Module is Loaded
+
+```bash
+lsmod | grep hello
+```
+
+You should see the module listed.
+
+---
+
+## 🧾 Step 9: Check Kernel Messages
+
+```bash
+dmesg | tail
+```
+
+This will show the most recent kernel log entries. You should see:
+
+```
+Hello, BCS_4A! Project Present to Sir Amin
+```
+
+---
+
+## 🧹 Step 10: Remove the Kernel Module
+
+```bash
+sudo rmmod hello
+dmesg | tail
+```
+
+You should now see:
+
+```
+Goodbye, BCS_4A!
+```
+
+---
+
+## 🧠 Additional Tip (Optional but Helpful)
+
+If you get this error while running `dmesg`:
+
+```bash
+dmesg: read kernel buffer failed: Operation not permitted
+```
+
+Run this command to add your user to the `adm` group (which has access to kernel logs):
+
+```bash
+sudo usermod -aG adm $USER
+```
+
+Then **log out and log back in** to apply the change.
+---
+
+## ✅ Summary
+
+This demo helped you:
+- Write and compile a simple kernel module.
+- Insert and remove the module.
+- View kernel log messages using `dmesg`.
 
 ### Resources
 
 - Official Arch Wiki on Kexec: [Kexec - ArchWiki](https://wiki.archlinux.org/title/Kexec)
+- [Arch Wiki – Kernel Live Patching](https://wiki.archlinux.org/title/Kernel_live_patching)
 - My Personal Blog: [Preserving Services with Faster Kernel Reboots Using Kexec](https://systemadmin-insights.hashnode.dev/preserving-services-with-faster-kernel-reboots-using-kexec)
 
 
